@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Upload, Wand2, Download, Loader2, ImageIcon, Settings } from "lucide-react";
+import { Upload, Wand2, Download, Loader2, ImageIcon, Settings, LogIn } from "lucide-react";
 import ReactCompareImage from "react-compare-image";
+import { useUser } from "@/hooks/use-user";
+import Link from "next/link";
 
 interface AIImageEditorProps {
   className?: string;
@@ -42,6 +44,7 @@ const ASPECT_RATIO_OPTIONS: { value: AspectRatio; label: string; description: st
 ];
 
 export function AIImageEditor({ className }: AIImageEditorProps) {
+  const { user, loading } = useUser();
   const [prompt, setPrompt] = useState("");
   const [inputImage, setInputImage] = useState<File | null>(null);
   const [inputImageUrl, setInputImageUrl] = useState<string>("");
@@ -52,6 +55,22 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
   // 新增的参数控制状态
   const [outputFormat, setOutputFormat] = useState<OutputFormat>('jpg');
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('1:1');
+
+  // 浏览器扩展冲突防护
+  useEffect(() => {
+    // 监听并捕获扩展相关的CSS选择器错误
+    const handleError = (event: ErrorEvent) => {
+      if (event.message?.includes('Syntax error, unrecognized expression') &&
+          event.filename?.includes('unionContentScript.js')) {
+        console.warn('Browser extension CSS selector conflict detected and handled');
+        event.preventDefault();
+        return false;
+      }
+    };
+
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
 
   // 处理文件拖拽
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -112,6 +131,12 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
 
   // 生成图片
   const handleGenerate = async () => {
+    // 检查用户认证
+    if (!user) {
+      alert('Please sign in to use AI image generation');
+      return;
+    }
+
     if (!prompt.trim()) {
       alert('Please enter a prompt');
       return;
@@ -122,7 +147,7 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
 
     try {
       let imageUrl = '';
-      
+
       // 如果有输入图片，先上传
       if (inputImage) {
         imageUrl = await uploadImage(inputImage);
@@ -225,26 +250,30 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
                       dragActive
                         ? "border-primary bg-primary/5"
                         : "border-border hover:border-primary/50",
-                      inputImageUrl && "border-primary bg-primary/5"
+                      inputImageUrl && "border-primary bg-primary/5",
+                      !user && "opacity-50 cursor-not-allowed"
                     )}
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
+                    onDragEnter={user ? handleDrag : undefined}
+                    onDragLeave={user ? handleDrag : undefined}
+                    onDragOver={user ? handleDrag : undefined}
+                    onDrop={user ? handleDrop : undefined}
                   >
                     <input
                       id="image-upload"
                       type="file"
                       accept="image/*"
-                      onChange={handleFileSelect}
+                      onChange={user ? handleFileSelect : undefined}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      disabled={!user}
                     />
                     {inputImageUrl ? (
-                      <div className="text-center">
+                      <div className="ai-upload-preview text-center">
                         <img
+                          id="ai-preview-image"
                           src={inputImageUrl}
                           alt="Input preview"
-                          className="mx-auto max-h-32 rounded-md object-contain"
+                          className="ai-preview-img mx-auto max-h-32 rounded-md object-contain"
+                          data-ai-component="preview-image"
                         />
                         <p className="mt-2 text-sm text-muted-foreground">
                           Click or drag to replace image
@@ -334,24 +363,48 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
                 </div>
 
                 {/* Generate Button */}
-                <Button
-                  onClick={handleGenerate}
-                  disabled={!prompt.trim() || isGenerating}
-                  className="w-full"
-                  size="lg"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Wand2 className="mr-2 h-4 w-4" />
-                      Generate Image
-                    </>
-                  )}
-                </Button>
+                {!user ? (
+                  <div className="space-y-4 p-4 border border-yellow-200 bg-yellow-50 rounded-lg">
+                    <div className="flex items-center gap-2 text-yellow-800">
+                      <LogIn className="h-5 w-5" />
+                      <span className="font-medium">Sign in required</span>
+                    </div>
+                    <p className="text-sm text-yellow-700">
+                      Please sign in to use AI image generation and upload features.
+                    </p>
+                    <div className="flex gap-2">
+                      <Link href="/sign-in">
+                        <Button size="sm" variant="default">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link href="/sign-up">
+                        <Button size="sm" variant="outline">
+                          Sign Up
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <Button
+                    onClick={handleGenerate}
+                    disabled={!prompt.trim() || isGenerating}
+                    className="w-full"
+                    size="lg"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="mr-2 h-4 w-4" />
+                        Generate Image
+                      </>
+                    )}
+                  </Button>
+                )}
               </CardContent>
             </Card>
 

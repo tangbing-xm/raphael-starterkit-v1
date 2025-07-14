@@ -59,3 +59,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* AI Image Editor - Browser Extension Protection */
+@layer components {
+  .ai-upload-preview {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .ai-preview-img {
+    pointer-events: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  /* Prevent extension selector conflicts */
+  [data-ai-component] {
+    position: relative;
+    z-index: 1;
+  }
+}

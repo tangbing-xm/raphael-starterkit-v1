@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
+
+    // 检查用户认证
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('image') as File;
 
@@ -31,33 +40,68 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 创建上传目录
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
     // 生成唯一文件名
     const timestamp = Date.now();
     const randomString = Math.random().toString(36).substring(2, 15);
     const extension = file.name.split('.').pop() || 'jpg';
     const filename = `${timestamp}-${randomString}.${extension}`;
-    const filepath = join(uploadDir, filename);
 
-    // 保存文件
+    // 使用用户ID作为文件夹路径，确保文件隔离
+    const filePath = `${user.id}/${filename}`;
+
+    // 将文件转换为ArrayBuffer
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filepath, buffer);
 
-    // 返回文件URL
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    const fileUrl = `${baseUrl}/uploads/${filename}`;
+    // 上传到Supabase Storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('ai-images')
+      .upload(filePath, bytes, {
+        contentType: file.type,
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError);
+      return NextResponse.json(
+        { error: 'Failed to upload image to storage' },
+        { status: 500 }
+      );
+    }
+
+    // 获取公开URL
+    const { data: urlData } = supabase.storage
+      .from('ai-images')
+      .getPublicUrl(filePath);
+
+    // 获取客户信息
+    const { data: customerData } = await supabase
+      .from('customers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    // 记录上传信息到数据库
+    if (customerData) {
+      await supabase
+        .from('user_uploads')
+        .insert({
+          customer_id: customerData.id,
+          filename: file.name,
+          file_path: filePath,
+          file_url: urlData.publicUrl,
+          file_size: file.size,
+          mime_type: file.type,
+          upload_source: 'web_upload'
+        });
+    }
 
     return NextResponse.json({
-      url: fileUrl,
+      url: urlData.publicUrl,
       filename,
       size: file.size,
-      type: file.type
+      type: file.type,
+      path: filePath
     });
 
   } catch (error) {
