@@ -13,8 +13,8 @@ const baseUrl = process.env.BASE_URL
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
-  title: "Raphael Starter Kit",
-  description: "The fastest way to build apps with global authentication and payments",
+  title: "AI Image Generator - Transform Ideas into Visuals",
+  description: "Create stunning images with AI-powered generation and editing. Transform text into visuals, edit photos, and unleash creativity with Flux AI technology.",
 };
 
 const geistSans = Geist({

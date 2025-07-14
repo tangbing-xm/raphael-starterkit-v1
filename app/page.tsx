@@ -11,7 +11,9 @@ export default async function Home() {
   return (
     <div className="flex flex-col gap-8 md:gap-12 lg:gap-24">
       <Hero />
-      <AIImageEditor className="py-16 sm:py-24" />
+      <div id="ai-image-editor">
+        <AIImageEditor className="py-16 sm:py-24" />
+      </div>
       <LogoCloud />
       <Features />
       <Stats />

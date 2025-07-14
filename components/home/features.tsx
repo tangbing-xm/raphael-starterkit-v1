@@ -1,31 +1,31 @@
 'use client'
 
-import { ArrowPathIcon, CloudArrowUpIcon, FingerPrintIcon, LockClosedIcon } from '@heroicons/react/24/outline'
+import { SparklesIcon, PhotoIcon, PaintBrushIcon, CpuChipIcon } from '@heroicons/react/24/outline'
 
 const features = [
   {
-    name: 'Global Authentication',
+    name: 'Text-to-Image Generation',
     description:
-      'Seamless sign-in experience for users worldwide. Support for email/password, OAuth providers, and advanced security features that work across all regions.',
-    icon: FingerPrintIcon,
+      'Transform your ideas into stunning visuals with our advanced AI. Simply describe what you want to see, and watch as our Flux model creates high-quality images from your text prompts.',
+    icon: SparklesIcon,
   },
   {
-    name: 'Secure Payments',
+    name: 'Image Transformation',
     description:
-      'Accept payments in multiple currencies with support for international payment methods. Our integration with Creem.io ensures smooth transactions for global customers.',
-    icon: LockClosedIcon,
+      'Upload existing images and transform them with AI-powered editing. Change styles, add elements, or completely reimagine your photos with intelligent image manipulation.',
+    icon: PhotoIcon,
   },
   {
-    name: 'Developer Friendly',
+    name: 'Creative Control',
     description:
-      'Built with Next.js and TypeScript for a modern development experience. Clean code structure and comprehensive documentation to help you get started quickly.',
-    icon: CloudArrowUpIcon,
+      'Fine-tune your creations with customizable parameters. Choose output formats, aspect ratios, and generation settings to get exactly the results you envision.',
+    icon: PaintBrushIcon,
   },
   {
-    name: 'Subscription Management',
+    name: 'Flux AI Technology',
     description:
-      'Ready-to-use subscription models and credit systems. Monitor usage, handle billing cycles, and manage customer accounts - all out of the box.',
-    icon: ArrowPathIcon,
+      'Powered by the cutting-edge Flux model from Black Forest Labs. Experience state-of-the-art image generation with exceptional quality, detail, and artistic coherence.',
+    icon: CpuChipIcon,
   },
 ]
 
@@ -34,14 +34,14 @@ export default function Features() {
     <div id="features" className="bg-background py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base/7 font-semibold text-primary">Global-Ready Platform</h2>
+          <h2 className="text-base/7 font-semibold text-primary">AI-Powered Creativity</h2>
           <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-foreground sm:text-5xl lg:text-balance">
-            Everything you need for worldwide business
+            Everything you need for AI image creation
           </p>
           <p className="mt-6 text-lg/8 text-muted-foreground">
-            Our starter kit provides all the essential tools to build applications that work globally. 
-            From authentication to payments, we've designed a solution that helps developers launch 
-            faster with features that work across borders.
+            Our platform combines cutting-edge AI technology with intuitive design to make image generation
+            accessible to everyone. From concept to creation, we provide the tools to bring your visual
+            ideas to life with unprecedented quality and control.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">

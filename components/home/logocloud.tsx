@@ -4,7 +4,7 @@ export default function LogoCloud() {
       <div className="bg-card py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:max-w-none">
-            <h2 className="text-center text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Built with Technologies You'll Love</h2>
+            <h2 className="text-center text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Powered by Modern Technology Stack</h2>
             <div className="mx-auto mt-10 grid grid-cols-2 items-center gap-x-8 gap-y-10 sm:grid-cols-3 sm:gap-x-10 lg:mx-0 lg:grid-cols-6">
               {/* Next.js Logo */}
               <div className="flex flex-col items-center gap-3">

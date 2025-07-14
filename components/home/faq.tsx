@@ -1,39 +1,39 @@
 const faqs = [
   {
     id: 1,
-    question: "How does the global authentication system work?",
+    question: "What is the Flux AI model and how does it work?",
     answer:
-      "Our authentication system is built on Supabase, which supports email/password login, OAuth providers (like Google), and magic link authentication. It works seamlessly across all regions worldwide and includes features like multi-factor authentication and session management.",
+      "Flux is a state-of-the-art AI image generation model developed by Black Forest Labs. It uses advanced diffusion technology to create high-quality images from text descriptions or transform existing images. Our platform integrates directly with Flux to provide you with cutting-edge image generation capabilities.",
   },
   {
     id: 2,
-    question: "What payment methods are supported?",
+    question: "What image formats and sizes are supported?",
     answer:
-      "Through our integration with Creem.io, we support major credit cards, PayPal, and various regional payment methods. The system handles multiple currencies and automatically manages exchange rates, making it easy to accept payments from customers worldwide.",
+      "Our platform supports multiple output formats including JPG, PNG, and WebP. You can choose from various aspect ratios like square (1:1), landscape (16:9), portrait (9:16), and many others. The system automatically optimizes images for quality and file size based on your selected format.",
   },
   {
     id: 3,
-    question: "Is this starter kit developer-friendly for beginners?",
+    question: "How do I get the best results from AI image generation?",
     answer:
-      "Absolutely! We've designed this kit with simplicity in mind. It includes comprehensive documentation, clean code structure, and follows best practices. Even if you're new to Next.js or React, you'll find it easy to understand and extend the codebase.",
+      "For optimal results, be specific and descriptive in your prompts. Include details about style, lighting, composition, and mood. You can also upload reference images to guide the transformation process. Experiment with different aspect ratios and formats to find what works best for your project.",
   },
   {
     id: 4,
-    question: "Can I deploy this application anywhere?",
+    question: "Can I use the generated images commercially?",
     answer:
-      "Yes, the application can be deployed to any modern hosting platform. We provide detailed deployment guides for Vercel, as well as instructions for deploying to traditional servers. The application is optimized to work globally with minimal configuration.",
+      "Yes, images generated through our platform can be used for commercial purposes. However, we recommend reviewing the specific terms of service and ensuring your use case complies with applicable copyright and intellectual property laws. Always respect third-party rights when creating derivative works.",
   },
   {
     id: 5,
-    question: "How do I manage subscriptions and billing?",
+    question: "How does the credit system work?",
     answer:
-      "The starter kit includes a complete subscription management system. You can define different subscription tiers, manage billing cycles, and handle customer accounts through the admin dashboard. All payment processing is handled securely by Creem.io.",
+      "Our platform uses a credit-based system where each image generation consumes credits. Different generation types and quality settings may use varying amounts of credits. You can purchase credit packages or subscribe to monthly plans that include credit allowances for regular use.",
   },
   {
     id: 6,
-    question: "Is the code base accessible for developers in all regions?",
+    question: "Is my uploaded content secure and private?",
     answer:
-      "Yes, we've carefully selected dependencies and hosting providers that work well globally. The codebase is optimized for developers worldwide, with consideration for different network environments and accessibility requirements.",
+      "Yes, we take privacy and security seriously. Uploaded images are processed securely and are not stored permanently on our servers. We use industry-standard encryption and security practices to protect your content throughout the generation process.",
   },
 ]
 

@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Upload, Wand2, Download, Loader2, ImageIcon, Settings } from "lucide-react";
+import ReactCompareImage from "react-compare-image";
 
 interface AIImageEditorProps {
   className?: string;
@@ -404,11 +405,33 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
                     )}
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-64 border-2 border-dashed border-border rounded-lg">
-                    <div className="text-center">
-                      <ImageIcon className="mx-auto h-8 w-8 text-muted-foreground" />
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        Generated image will appear here
+                  <div className="space-y-4">
+                    {/* Before/After Demo Effect */}
+                    <div className="relative rounded-lg overflow-hidden border border-border">
+                      <ReactCompareImage
+                        leftImage="/images/1.png"
+                        rightImage="/images/2.webp"
+                        leftImageLabel="Before"
+                        rightImageLabel="After"
+                        leftImageAlt="Original image"
+                        rightImageAlt="AI enhanced image"
+                        sliderLineColor="#3b82f6"
+                        sliderLineWidth={3}
+                        handleSize={40}
+                        hover={false}
+                        skeleton={
+                          <div className="flex items-center justify-center h-64 bg-muted">
+                            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                          </div>
+                        }
+                      />
+                    </div>
+                    <div className="text-center space-y-2">
+                      <p className="text-sm font-medium text-foreground">
+                        ✨ See the AI magic in action
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Upload your image and enter a prompt to get started
                       </p>
                     </div>
                   </div>
