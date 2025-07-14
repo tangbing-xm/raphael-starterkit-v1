@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Upload, Wand2, Download, Loader2, ImageIcon, Settings, LogIn } from "lucide-react";
 import ReactCompareImage from "react-compare-image";
 import { useUser } from "@/hooks/use-user";
+import { SignInModal } from "@/components/auth/sign-in-modal";
 import Link from "next/link";
 
 interface AIImageEditorProps {
@@ -55,6 +56,9 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
   // 新增的参数控制状态
   const [outputFormat, setOutputFormat] = useState<OutputFormat>('jpg');
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('1:1');
+
+  // 登录模态框状态
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
   // 浏览器扩展冲突防护
   useEffect(() => {
@@ -228,6 +232,18 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
         </div>
 
         <div className="mx-auto mt-16 max-w-7xl">
+          {/* 登录模态框 */}
+          <SignInModal
+            open={showSignInModal}
+            onOpenChange={setShowSignInModal}
+            onSignInSuccess={() => {
+              // 登录成功后刷新用户状态
+              window.location.reload();
+            }}
+          />
+
+
+
           <div className="grid gap-8 lg:grid-cols-3">
             {/* Input Section */}
             <Card className="lg:col-span-1">
@@ -373,13 +389,18 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
                       Please sign in to use AI image generation and upload features.
                     </p>
                     <div className="flex gap-2">
-                      <Link href="/sign-in">
-                        <Button size="sm" variant="default">
-                          Sign In
-                        </Button>
-                      </Link>
+                      <Button
+                        size="sm"
+                        variant="default"
+                        onClick={() => setShowSignInModal(true)}
+                      >
+                        Sign In
+                      </Button>
                       <Link href="/sign-up">
-                        <Button size="sm" variant="outline">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                        >
                           Sign Up
                         </Button>
                       </Link>

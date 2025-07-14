@@ -7,6 +7,8 @@ import { ThemeSwitcher } from "./theme-switcher";
 import { Logo } from "./logo";
 import { usePathname } from "next/navigation";
 import { MobileNav } from "./mobile-nav";
+import { SignInModal } from "./auth/sign-in-modal";
+import { useState } from "react";
 
 interface HeaderProps {
   user: any;
@@ -20,6 +22,9 @@ interface NavItem {
 export default function Header({ user }: HeaderProps) {
   const pathname = usePathname();
   const isDashboard = pathname?.startsWith("/dashboard");
+
+  // 登录模态框状态
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
   // Main navigation items that are always shown
   const mainNavItems: NavItem[] = [
@@ -75,17 +80,36 @@ export default function Header({ user }: HeaderProps) {
             </div>
           ) : (
             <div className="hidden md:flex gap-2">
-              <Button asChild size="sm" variant="outline">
-                <Link href="/sign-in">Sign in</Link>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowSignInModal(true)}
+              >
+                Sign in
               </Button>
               <Button asChild size="sm">
                 <Link href="/sign-up">Sign up</Link>
               </Button>
             </div>
           )}
-          <MobileNav items={navItems} user={user} isDashboard={isDashboard} />
+          <MobileNav
+            items={navItems}
+            user={user}
+            isDashboard={isDashboard}
+            onSignInClick={() => setShowSignInModal(true)}
+          />
         </div>
       </div>
+
+      {/* 登录模态框 */}
+      <SignInModal
+        open={showSignInModal}
+        onOpenChange={setShowSignInModal}
+        onSignInSuccess={() => {
+          // 登录成功后刷新页面状态
+          window.location.reload();
+        }}
+      />
     </header>
   );
 }

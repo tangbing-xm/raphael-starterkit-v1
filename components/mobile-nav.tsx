@@ -16,9 +16,10 @@ interface MobileNavProps {
   items: { label: string; href: string }[];
   user: any;
   isDashboard: boolean;
+  onSignInClick?: () => void;
 }
 
-export function MobileNav({ items, user, isDashboard }: MobileNavProps) {
+export function MobileNav({ items, user, isDashboard, onSignInClick }: MobileNavProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -61,8 +62,12 @@ export function MobileNav({ items, user, isDashboard }: MobileNavProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <Button asChild variant="outline" className="w-full">
-                <Link href="/sign-in">Sign in</Link>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={onSignInClick}
+              >
+                Sign in
               </Button>
               <Button asChild variant="default" className="w-full">
                 <Link href="/sign-up">Sign up</Link>
