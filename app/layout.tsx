@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { createClient } from "@/utils/supabase/server";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
+import StagewiseToolbarWrapper from "@/components/stagewise-toolbar";
 
 const baseUrl = process.env.BASE_URL
   ? `https://${process.env.BASE_URL}`
@@ -45,6 +46,7 @@ export default async function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
+          <StagewiseToolbarWrapper />
           <Toaster />
         </ThemeProvider>
       </body>
