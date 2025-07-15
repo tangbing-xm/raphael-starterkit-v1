@@ -80,4 +80,12 @@
     position: relative;
     z-index: 1;
   }
+
+  /* 移动端响应式调整 */
+  @media (max-width: 768px) {
+    /* 在移动端调整超宽比例 */
+    .aspect-\[21\/9\] {
+      aspect-ratio: 16/9 !important;
+    }
+  }
 }
