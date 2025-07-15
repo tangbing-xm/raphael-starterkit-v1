@@ -491,25 +491,23 @@ export function AIImageEditor({ className }: AIImageEditorProps) {
                   <div className="space-y-4">
                     {/* Before/After Demo Effect */}
                     <div className="relative rounded-lg overflow-hidden border border-border">
-                      <div className="w-full" style={{ aspectRatio: '16/9', minHeight: '300px', maxHeight: '500px' }}>
-                        <ReactCompareImage
-                          leftImage="/images/1.png"
-                          rightImage="/images/2.webp"
-                          leftImageLabel="Before"
-                          rightImageLabel="After"
-                          leftImageAlt="Original image"
-                          rightImageAlt="AI enhanced image"
-                          sliderLineColor="#3b82f6"
-                          sliderLineWidth={3}
-                          handleSize={40}
-                          hover={false}
-                          skeleton={
-                            <div className="flex items-center justify-center w-full h-full bg-muted">
-                              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                            </div>
-                          }
-                        />
-                      </div>
+                      <ReactCompareImage
+                        leftImage="/images/1.png"
+                        rightImage="/images/2.webp"
+                        leftImageLabel="Before"
+                        rightImageLabel="After"
+                        leftImageAlt="Original image"
+                        rightImageAlt="AI enhanced image"
+                        sliderLineColor="#3b82f6"
+                        sliderLineWidth={3}
+                        handleSize={40}
+                        hover={false}
+                        skeleton={
+                          <div className="flex items-center justify-center w-full h-[500px] bg-muted">
+                            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                          </div>
+                        }
+                      />
                     </div>
                     <div className="text-center space-y-2">
                       <p className="text-sm font-medium text-foreground">
